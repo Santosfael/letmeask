@@ -1,5 +1,7 @@
-import { Link } from 'react-router-dom';
+import { FormEvent, useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 
+import { ref, set,database, push } from '../../services/firebase';
 import { Button } from '../../components/Button';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -10,6 +12,29 @@ import './styles.scss';
 
 export function NewRoom() {
     const { user } = useAuth();
+    const history = useHistory();
+    const [ newRoom, setNewRoom ] = useState('');
+
+    async function handleCreateRoom(event: FormEvent) {
+        event.preventDefault();
+        if(newRoom.trim() === '') {
+            return;
+        }
+
+        /*
+            Para adicionar uma lista versão do firebase ^9.4.1
+        */
+        const db = database;
+        const pushRef = ref(db, 'rooms');
+        const firebaseRoom = push(pushRef);
+        set(firebaseRoom, {
+            title: newRoom,
+            authorId: user?.id,
+        });
+
+        history.push(`/rooms/${firebaseRoom.key}`)
+    }
+
     return (
         <div id="page-auth">
             <aside>
@@ -20,12 +45,13 @@ export function NewRoom() {
             <main>
                 <div className="main-content">
                     <img src={logoImg} alt="Letmeask" />
-                    <h1>{user?.name}</h1>
                     <h2>Criar uma nova sala</h2>
-                    <form action="">
+                    <form onSubmit={handleCreateRoom}>
                         <input 
                             type="text"
                             placeholder="Nome da sala"
+                            onChange={event => setNewRoom(event.target.value)}
+                            value={newRoom}
                         />
                         <Button type="submit">
                             Criar sala
