@@ -11,7 +11,7 @@ type QuestionProps = {
     children?: ReactNode;
 }
 
-export function Question({content, author, children}: QuestionProps) {
+export function Question({ content, author, children }: QuestionProps) {
     return (
         <div className="question">
             <p>{content}</p>
