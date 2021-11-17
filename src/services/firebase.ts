@@ -1,6 +1,6 @@
 import firebase from 'firebase/compat/app';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { getDatabase, ref, set, push, get, child, onValue, onChildAdded } from 'firebase/database';
+import { getDatabase, ref, set, push, get, child, onValue, onChildAdded, off, remove, update } from 'firebase/database';
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_API_KEY,
@@ -29,5 +29,8 @@ export {
   get,
   child,
   onValue,
-  onChildAdded
+  onChildAdded,
+  off,
+  remove,
+  update
 };
